@@ -1,0 +1,82 @@
+--alter session set "_ORACLE_SCRIPT" = true;
+--CREATE ROLE SYS_ADMIN;
+--Tao Role SYS_ADMIN va cap cac quyen can thiet--
+--GRANT SELECT ON V_$sga TO SYS_ADMIN;
+--GRANT SELECT ON Dba_Roles TO SYS_ADMIN;
+--GRANT SELECT ON Dba_Users TO SYS_ADMIN;
+--GRANT SELECT ON Dba_Role_Privs TO SYS_ADMIN ;
+--GRANT DROP USER TO SYS_ADMIN WITH ADMIN OPTION;
+--GRANT GRANT ANY ROLE, GRANT ANY PRIVILEGE TO SYS_ADMIN WITH ADMIN OPTION;
+--GRANT CONNECT, RESOURCE, DBA TO SYS_ADMIN WITH ADMIN OPTION;
+
+--Tao User SUPERADMIN va cap cho no cac quyen cung nhu gan role cho no la SYS_ADMIN--
+--CREATE USER SUPERADMIN IDENTIFIED BY 0201;
+--GRANT SELECT ON Dba_Role_Privs TO SUPERADMIN WITH GRANT OPTION;
+--GRANT CREATE SESSION TO SUPERADMIN WITH ADMIN OPTION;
+--GRANT UNLIMITED TABLESPACE TO SUPERADMIN WITH ADMIN OPTION;
+--GRANT SYS_ADMIN TO SUPERADMIN;
+--GRANT CREATE PROCEDURE TO SUPERADMIN;
+--GRANT EXECUTE ON DBMS_RLS TO SUPERADMIN;
+--GRANT EXEMPT ACCESS POLICY TO SUPERADMIN;
+
+
+--SAU KHI TAO XONG, HAY MO CONNECTION MOI VA DANG NHAP BANG THANG ADMIN NAY
+
+alter session set "_ORACLE_SCRIPT" = true;
+/
+--Proc tao user
+CREATE OR REPLACE PROCEDURE ADD_USER(userName IN varchar2, pass IN varchar2) 
+AUTHID CURRENT_USER IS
+    BEGIN 
+    EXECUTE IMMEDIATE 'alter session set "_ORACLE_SCRIPT"=true';
+    EXECUTE IMMEDIATE
+    'CREATE USER '||userName||' IDENTIFIED BY '||pass;
+    END;
+/
+--Proc xoa User
+CREATE OR REPLACE PROCEDURE DROP_USER(userName IN varchar2)
+AUTHID CURRENT_USER IS
+    BEGIN
+    EXECUTE IMMEDIATE 'alter session set "_ORACLE_SCRIPT"=true';
+    EXECUTE IMMEDIATE
+    'DROP USER '||userName;
+    END;
+/
+--Proc thay mat khau
+CREATE OR REPLACE PROCEDURE USER_ALTER (name_user IN varchar2, new_pass IN varchar2)
+AUTHID CURRENT_USER IS
+    BEGIN
+        EXECUTE IMMEDIATE 'alter session set "_ORACLE_SCRIPT"=true';
+        EXECUTE IMMEDIATE
+        'ALTER USER '|| name_user || ' IDENTIFIED BY ' || new_pass;
+    END;
+/
+--Proc tao role
+CREATE OR REPLACE PROCEDURE ADD_ROLE(roleName IN varchar2)
+AUTHID CURRENT_USER IS
+    BEGIN
+    EXECUTE IMMEDIATE 'alter session set "_ORACLE_SCRIPT"=true';
+    EXECUTE IMMEDIATE
+    'CREATE ROLE '||roleName;
+    END;
+/
+--Proc xoa Role
+CREATE OR REPLACE PROCEDURE DROP_ROLE(roleName IN varchar2)
+AUTHID CURRENT_USER IS
+    BEGIN
+    EXECUTE IMMEDIATE 'alter session set "_ORACLE_SCRIPT"=true';
+    EXECUTE IMMEDIATE
+    'DROP ROLE '||roleName;
+    END;
+/
+--TAO BANG HSBA--
+Create table HSBA(
+	Ma_HSBA number not null PRIMARY KEY,
+Ma_BN number not null,
+Ngay date,
+Chan_Doan nvarchar2(40),
+Ma_BS number not null,
+Ma_Khoa number not null,
+Ma_CSYT number not null,
+Ket_Luan nvarchar2(40)
+);
